@@ -16,7 +16,7 @@ public class CrptApi {
     private final ScheduledExecutorService scheduler;
 
     public CrptApi(Long reqInterval, int reqCount) {
-        this.semaphore = new Semaphore(reqCount, true); // true - справедливое распределение разрешений
+        this.semaphore = new Semaphore(reqCount, true);
         this.scheduler = Executors.newScheduledThreadPool(1);
 
         //запуск планировщика, который будет освобождать разрешения с интервалом reqInterval
@@ -24,11 +24,11 @@ public class CrptApi {
     }
 
     private void releasePermit() {
-        semaphore.release(); // Освободить разрешение в планировщике
+        semaphore.release();
     }
 
     public void documentCreation(Objects document, String signature){
-        //создание
+        //создание http клиента
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             //получение разрешения от semaphore
             semaphore.acquire();
